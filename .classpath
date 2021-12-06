@@ -6,7 +6,15 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/jfreechart-demo-1.5.2-jar-with-dependencies.jar"/>
-	<classpathentry kind="lib" path="lib/opencv-454.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-demo-1.5.2-jar-with-dependencies.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/thanh/Downloads/opencv/build/x64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/opencv-454.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/thanh/Documents/CPP/Fall 2021/CS 5550/Projects/opencv"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

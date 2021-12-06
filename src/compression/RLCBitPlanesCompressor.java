@@ -81,15 +81,15 @@ public class RLCBitPlanesCompressor implements Compressor
 		
 		// Calculate the number of integers take to store the original image and the compressed image
 		int originalBits = 0;
-		int compressedBits = this.compressedImage[0].size() + this.compressedImage[1].size();	
+		int compressedBits = 0;	
 		for (int i = 2; i < this.compressedImage.length; i++) 
         {
 			originalBits += bitPlanes[i - 2].length;
-			compressedBits += this.compressedImage[i].size();		
+			compressedBits += (this.compressedImage[i].size() * 8);		
         }
 
 		// Calculate the compression rate
-		double compressionRate = (double)originalBits / compressedBits;
+		double compressionRatio = (double)originalBits / compressedBits;
 		
 		// Record the time when the compression ends
 		long endTime = System.nanoTime();
@@ -98,7 +98,7 @@ public class RLCBitPlanesCompressor implements Compressor
 		long runTime = endTime - startTime;
 		
 		// Show the compression result
-		Compressor.showCompressionResult(compressionRate, runTime, this);
+		Compressor.showCompressionResult(compressionRatio, runTime, this);
 	}
 
 

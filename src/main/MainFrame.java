@@ -28,7 +28,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -202,13 +201,13 @@ public class MainFrame extends JFrame
 		JLabel originalImageLabel = new JLabel("Original Image");
 		originalImageLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
 		originalImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		originalImageLabel.setBounds(25, 20, 512, 25);
+		originalImageLabel.setBounds(25, 8, 512, 25);
 		contentPane.add(originalImageLabel);
 		
 		JLabel processedImageLabel = new JLabel("Processed Image");
 		processedImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		processedImageLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
-		processedImageLabel.setBounds(850, 20, 512, 25);
+		processedImageLabel.setBounds(850, 8, 512, 25);
 		contentPane.add(processedImageLabel);
 		
 		JLabel scalingAlgorithmLabel = new JLabel("Scaling Algorithm");
@@ -629,14 +628,20 @@ public class MainFrame extends JFrame
 		browseButton.setBounds(25, 580, 200, 30);
 		contentPane.add(browseButton);
 		
+		
+		JButton calculateRMSEButton = new JButton("CALCULATE RMSE");
+		calculateRMSEButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		calculateRMSEButton.setBounds(850, 580, 160, 30);
+		contentPane.add(calculateRMSEButton);
+		
 		JButton setAsOriginalImageButton = new JButton("SET AS ORIGINAL IMAGE");
 		setAsOriginalImageButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		setAsOriginalImageButton.setBounds(850, 580, 200, 30);
+		setAsOriginalImageButton.setBounds(1026, 580, 160, 30);
 		contentPane.add(setAsOriginalImageButton);		
 		
 		JButton showHistogramButton = new JButton("SHOW HISTOGRAM");
 		showHistogramButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		showHistogramButton.setBounds(1162, 580, 200, 30);
+		showHistogramButton.setBounds(1202, 580, 160, 30);
 		contentPane.add(showHistogramButton);
 		
 
@@ -655,6 +660,18 @@ public class MainFrame extends JFrame
 		compressButton.setBounds(560, 580, 265, 30);
 		contentPane.add(compressButton);
 		
+		JLabel instruction1 = new JLabel("(Double click on image to resize it to fit the view)");
+		instruction1.setHorizontalAlignment(SwingConstants.CENTER);
+		instruction1.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		instruction1.setBounds(25, 25, 512, 25);
+		contentPane.add(instruction1);
+		
+		JLabel instruction2 = new JLabel("(Click and hold on the image to see the changes after being processed)");
+		instruction2.setHorizontalAlignment(SwingConstants.CENTER);
+		instruction2.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		instruction2.setBounds(850, 25, 512, 25);
+		contentPane.add(instruction2);
+
 		
 		processButton.addMouseListener(new MouseAdapter() 
 		{
@@ -748,16 +765,6 @@ public class MainFrame extends JFrame
             @Override
             public void mouseClicked(MouseEvent e) 
             {
-            	/*
-            	try {
-					originalImg = ImageIO.read(new File(""));
-				} catch (IOException e1) {
-					
-					e1.printStackTrace();
-				}
-            	setOriginalImage(originalImg);
-            	*/
-            	
             	JFileChooser fileChooser = new JFileChooser();
     			int option = fileChooser.showDialog(new JFrame(), "Choose image file");
     			if (option == JFileChooser.APPROVE_OPTION)
@@ -776,6 +783,15 @@ public class MainFrame extends JFrame
     			
             };
         });
+		
+		
+		calculateRMSEButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				Processor.calculateRMSE(originalImg, processedImg);
+			}
+		});
 		
 		
 		setAsOriginalImageButton.addMouseListener(new MouseAdapter() 

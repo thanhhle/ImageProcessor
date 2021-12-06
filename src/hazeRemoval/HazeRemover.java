@@ -159,6 +159,7 @@ public interface HazeRemover extends Processor
 		double[][][] transmissionRefine = transmissionMap;
 		
 		int r = Math.min(rgbs.length, rgbs[0].length)/8;
+		// int r = 300;
 		double eps = 0.0001;
 		
 		// Apply Guided filter to perform refinement

@@ -1,8 +1,12 @@
 package processing;
 
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
@@ -194,5 +198,47 @@ public interface Processor
 		}
 		
 		return rgbValues;
+	}
+	
+	
+	
+	/**
+	 * Calculate the Root Mean Square Error of the processed image and the original image
+	 * @param originalImage the original image
+	 * @param processedImage the processed image
+	 */
+	public static void calculateRMSE(BufferedImage originalImage, BufferedImage processedImage)
+	{
+		double rmse = 0.0;
+
+        for (int x = 0; x < originalImage.getWidth(); x++)
+        {
+            for (int y = 0; y < originalImage.getHeight(); y++) 
+            {
+                int originalIntensity = originalImage.getRaster().getSample(x, y, 0);
+                int processedIntensity = processedImage.getRaster().getSample(x, y, 0);
+                
+                rmse += Math.pow(processedIntensity - originalIntensity, 2);
+            }
+        }
+
+        rmse /= (originalImage.getWidth() * originalImage.getHeight());
+        rmse = Math.sqrt(rmse);
+        
+        JFrame result = new JFrame("Result"); 
+		result.setSize(300, 150);  
+		result.setLocationRelativeTo(null);  
+		result.getContentPane().setLayout(null);
+		result.setVisible(true);   
+
+	    JLabel rmseLabel = new JLabel("RMSE: ");
+	    rmseLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
+	    rmseLabel.setBounds(100, 30, 200, 25);
+	    result.add(rmseLabel);  
+	    
+	    JLabel rmseValue = new JLabel(String.valueOf(rmse));
+	    rmseValue.setFont(new Font("Tahoma", Font.PLAIN, 11));
+	    rmseValue.setBounds(150, 30, 200, 25);
+	    result.add(rmseValue); 
 	}
 }

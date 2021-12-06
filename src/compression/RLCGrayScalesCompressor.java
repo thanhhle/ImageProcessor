@@ -64,11 +64,11 @@ public class RLCGrayScalesCompressor implements Compressor
 		
 		
 		// Calculate the number of bytes take to store the original image and the compressed image
-		int originalBits = intensities.length;
-		int compressedBits = this.compressedImage[0].size() + this.compressedImage[1].size() + this.compressedImage[2].size();
+		int originalBits = intensities.length * 8;
+		int compressedBits = this.compressedImage[2].size() * 8;
 	
 		// Calculate the compression rate
-		double compressionRate = (double)originalBits / compressedBits;
+		double compressionRatio = (double)originalBits / compressedBits;
 		
 		// Record the time when the compression ends
 		long endTime = System.nanoTime();
@@ -77,7 +77,7 @@ public class RLCGrayScalesCompressor implements Compressor
 		long runTime = endTime - startTime;
 		
 		// Show the compression result
-		Compressor.showCompressionResult(compressionRate, runTime, this);
+		Compressor.showCompressionResult(compressionRatio, runTime, this);
 	}
 
 

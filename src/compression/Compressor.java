@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
@@ -17,9 +16,7 @@ import javax.swing.JLabel;
 import main.MainFrame;
 
 public interface Compressor 
-{
-	enum Mode {GrayscaleValues, BitPlanes}
-	
+{	
 	/**
 	 * Perform compression on the given image
 	 * @param image the input image
@@ -34,29 +31,10 @@ public interface Compressor
 	
 	
 	/**
-	 * Get an array of the image's intensity values
+	 * Get an array of the image's intensity values in byte
 	 * @param image the input image
-	 * @return an array of intensity values
+	 * @return an byte array of intensity values
 	 */
-	/*
-	public static int[] getIntensities(BufferedImage image)
-	{
-		int[] intensities = new int[image.getWidth() * image.getHeight()];
-		
-		int i = 0;
-		for(int x = 0; x < image.getWidth(); x++) 
-		{
-			for(int y = 0; y < image.getHeight(); y++) 
-			{
-				intensities[i] = image.getRaster().getSample(x, y, 0);
-				i++;
-			}
-		}
-		return intensities;
-	}
-	*/
-	
-	
 	public static byte[] getIntensities(BufferedImage image)
 	{
 		byte[] intensities = new byte[image.getWidth() * image.getHeight()];
@@ -70,34 +48,6 @@ public interface Compressor
 				i++;
 			}
 		}
-		return intensities;
-	}
-	
-	
-	public static BitSet getIntensitiesInBitSet(BufferedImage image)
-	{
-		BitSet intensities = new BitSet(8 * image.getWidth() * image.getHeight());
-		
-		int i = 0;
-		for(int x = 0; x < image.getWidth(); x++) 
-		{
-			for(int y = 0; y < image.getHeight(); y++) 
-			{
-				int intensity = image.getRaster().getSample(x, y, 0);
-				
-				String binaryString = String.format("%8s", Integer.toBinaryString(intensity)).replace(' ', '0');
-				for(int j = 0; j < binaryString.length(); j++)
-				{
-					if(binaryString.charAt(j) == '1')
-					{
-						intensities.set(i + j);
-					}
-				}
-				
-				i++;
-			}
-		}
-		
 		return intensities;
 	}
 	
@@ -134,42 +84,14 @@ public interface Compressor
 	}
 	
 	
-	public static BitSet[] getBitPlanesInBitSet(BufferedImage image)
-	{
-		BitSet[] bitPlanes = new BitSet[8];
-		
-		int i = 0;
-		for(int x = 0; x < image.getWidth(); x++) 
-		{
-			for(int y = 0; y < image.getHeight(); y++) 
-			{
-				int intensity = image.getRaster().getSample(x, y, 0);
-				
-				String binaryString = String.format("%8s", Integer.toBinaryString(intensity)).replace(' ', '0');
-				for(int j = 0; j < binaryString.length(); j++)
-				{
-					if(binaryString.charAt(j) == '1')
-					{
-						bitPlanes[i].set((i * 8) + j);
-					}
-				}
-				
-				i++;
-			}
-		}
-		
-		return bitPlanes;
-	}
-	
-	
 	/**
 	 * Show the compression rate with compression rate and compression time
 	 * Click on "DECOMPRESS" button to decompress the image
-	 * @param compressionRate the compression rate
+	 * @param compressionRatio the compression ratio
 	 * @param compressionTime the compression time
 	 * @param compressor the compressor used to compress the image
 	 */
-	public static void showCompressionResult(double compressionRate, long compressionTime, Compressor compressor)
+	public static void showCompressionResult(double compressionRatio, long compressionTime, Compressor compressor)
 	{
 		JFrame result = new JFrame("Result"); 
 		result.setSize(300, 150);  
@@ -177,25 +99,25 @@ public interface Compressor
 		result.getContentPane().setLayout(null);
 		result.setVisible(true);   
 	    
-	    JLabel rateLabel = new JLabel("Compression Rate: ");
-	    rateLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
-	    rateLabel.setBounds(40, 10, 200, 25);
-	    result.add(rateLabel);  
+	    JLabel ratioLabel = new JLabel("Compression Ratio: ");
+	    ratioLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
+	    ratioLabel.setBounds(40, 10, 200, 25);
+	    result.add(ratioLabel);  
 	    
-	    JLabel rate = new JLabel(String.valueOf(String.format("%.4f", compressionRate)));
-	    rate.setFont(new Font("Tahoma", Font.PLAIN, 11));
-	    rate.setBounds(170, 10, 200, 25);
-	    result.add(rate);
+	    JLabel ratioValue = new JLabel(String.valueOf(String.format("%.4f", compressionRatio)));
+	    ratioValue.setFont(new Font("Tahoma", Font.PLAIN, 11));
+	    ratioValue.setBounds(170, 10, 200, 25);
+	    result.add(ratioValue);
 	    
 	    JLabel timeLabel = new JLabel("Compression Time (ns): ");
 	    timeLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
 	    timeLabel.setBounds(40, 40, 200, 25);
 	    result.add(timeLabel);  
 	    
-	    JLabel time = new JLabel(String.valueOf(compressionTime));
-	    time.setFont(new Font("Tahoma", Font.PLAIN, 11));
-	    time.setBounds(170, 40, 200, 25);
-	    result.add(time); 
+	    JLabel timeValue = new JLabel(String.valueOf(compressionTime));
+	    timeValue.setFont(new Font("Tahoma", Font.PLAIN, 11));
+	    timeValue.setBounds(170, 40, 200, 25);
+	    result.add(timeValue); 
 	    
 	    JButton decompressButton = new JButton("DECOMPRESS");  
 	    decompressButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -278,5 +200,39 @@ public interface Compressor
 		value += Byte.toUnsignedInt(bytes.get(bytes.size() - 1));
 		
 		return value;
+	}
+	
+	
+	public static BitSet intToBitSet(int value) 
+	{
+        BitSet bitSet = new BitSet();
+        
+        int i = 0;
+        while (value != 0) 
+        {
+            if (value % 2 != 0) 
+            {
+            	bitSet.set(i);
+            }
+            
+            i++;
+            value = value >>> 1;
+        }
+
+        return bitSet;
+    }
+	
+	
+	public static int bitSetToInt(BitSet bitSet)
+	{
+		int intValue = 0;
+        for (int bit = 0; bit < bitSet.length(); bit++) 
+        {	
+            if (bitSet.get(bit)) 
+            {
+                intValue |= (1 << bit);
+            }
+        }
+        return intValue;
 	}
 }
